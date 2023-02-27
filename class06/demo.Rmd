@@ -1,0 +1,31 @@
+---
+title: "demo.rmd"
+author: "Jordan Laxa"
+date: "2023-01-27"
+output:
+  word_document: default
+  html_document: default
+  pdf_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Week 06
+
+This week we introduced this and that and covered another thing
+
+```{r}
+# My code
+mtcars
+```
+
+My notes about my thinking could be here
+
+```{r}
+library(ggplot2)
+
+ggplot(mtcars) + aes(x=mpg, y=disp) +geom_point() +geom_smooth()
+```
+

@@ -1,0 +1,44 @@
+---
+title: "Class 05: Data Visualization with GGPLOT"
+author: "Jordan Laxa"
+format:  html
+---
+
+```{r}
+# Install packages -> install.packages("ggplot2")
+# Load packages
+library(ggplot2)
+```
+
+```{r}
+# Scatterplot of Cars data
+ggplot(cars) + aes(x=speed, y=dist) +geom_point()
+```
+
+```{r}
+# Cars plot with geom_smooth() and geom_point()
+ggplot(cars) + aes(x=speed, y=dist) + geom_smooth(method="lm", se=FALSE) + geom_point()
+```
+
+```{r}
+# Read an input file
+read.delim
+```
+
+```{r}
+# Accessing Gene data
+url <- "https://bioboot.github.io/bimm143_S20/class-material/up_down_expression.txt"
+genes <- read.delim(url)
+```
+
+```{r}
+# Plot with custom settings
+p <- ggplot(genes) + aes(x=Condition1, y=Condition2, col=State) + geom_point() + scale_color_manual( values=c("blue", "gray", "red"))
+p
+```
+
+```{r}
+# Plot with labs setting
+p + labs(title="Gene Expression Changes Upon Drug Treament", x="Control (no drug)", y="Drug Treament" )
+
+```

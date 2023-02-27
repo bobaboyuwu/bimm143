@@ -1,0 +1,7 @@
+---
+title: "R Functions Lab (Class 06)"
+author: Jordan Laxa
+format: html
+---
+
+

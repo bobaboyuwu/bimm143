@@ -1,0 +1,82 @@
+---
+title: "homework6"
+author: "Jordan Laxa"
+date: "2023-01-30"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# Q1. What type of object is returned from the read.pdb() function? 
+
+library(bio3d)
+s1 <- read.pdb("4AKE") # kinase with drug
+s2 <- read.pdb("1AKE") # kinase no drug
+s3 <- read.pdb("1E4Y") # kinase with drug
+typeof(s1)
+```
+
+```{r}
+# Q2. What does the trim.pdb() function do?
+s1.chainA <- trim.pdb(s1, chain="A", elety="CA")
+s2.chainA <- trim.pdb(s2, chain="A", elety="CA")
+s3.chainA <- trim.pdb(s1, chain="A", elety="CA")
+# It searches through the list and keeps the parts of the list in which the chain = "A" and elety = "CA".
+```
+
+```{r}
+# Q3. What input parameter would turn off the marginal black and grey rectangles in the plots and what do they represent in this case?
+s1.b <- s1.chainA$atom$b
+
+s2.b <- s2.chainA$atom$b
+
+s3.b <- s3.chainA$atom$b
+
+plotb3(s1.b, typ="l", ylab="Bfactor")
+
+# Removing the sse=s1.chainA parameter turns off the marginal black and grey rectangles. They represent the sum of squared error.
+```
+
+```{r}
+# Q4. What would be a better plot to compare across the different proteins?
+
+plotb3(s1.b, typ="h", ylab="Bfactor")
+
+# A histogram would be a better plot to compare across the different proteins
+```
+
+```{r}
+# Q5.Which proteins are more similar to each other in their B-factor trends. How could you quantify this?
+
+hc <- hclust( dist( rbind(s1.b, s2.b, s3.b) ) )
+plot(hc)
+
+# The "4AKE" and "1E4Y" proteins are more similar to each other in their B-factor trends. They both have a height of 0 in the dendrogram, so they are very similar to each other. In contrast, "1AKE" had a height of 300, which means it is very dissimilar to the other two proteins.
+
+```
+
+```{r}
+# Name of the function is analyzeProtein
+# The arguments are the name of the protein = x, the chain = y, the elety = z, and the atom = a.
+
+analyzeProtein <- function(x, y, z, a) {
+  # Access the protein database for protein x
+  s <- read.pdb(x)
+  # Access the parts of protein x with the chain y and elety z
+  s.chain <- trim.pdb(s, chain = y, elety = z)
+  # Access the atom a from the protein x with the chain y and elety z
+  s.atom <- s.chain$atom[,a];
+  # Plot the histogram of the Bfactor of the atom a from protein x with chain y and elety z
+  plotb3(s.atom, sse=s.chain, typ="h", ylab="Bfactor", ylim = c(0, 100))
+}
+# Example of the function being used
+analyzeProtein("4AKE", "A", "CA", "b")
+```
+

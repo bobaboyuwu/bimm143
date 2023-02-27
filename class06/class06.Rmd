@@ -1,0 +1,69 @@
+---
+title: "R Functions Lab (Class 06)"
+author: "Jordan Laxa"
+date: "2023-01-27"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+```{r}
+# Q1. Function for the average grade of a student, excluding the lowest score and dropped NA scores
+
+grade <- function(x) {
+  # Find the minimum score, exluding NA scores
+  xmin <- min(x, na.rm = TRUE)
+  
+  # Exclude the lowest score from the other grades
+  xNoMin <- x[!x == xmin]
+  
+  # Find the mean of the other grades, excluding the lowest score and NA scores
+  mean(xNoMin, na.rm = TRUE)
+}
+```
+
+```{r}
+# Access the grades data
+# Make it easier to access the student's grades
+df <- read.csv('https://tinyurl.com/gradeinput')
+
+# Convert the strings to numerics
+
+chars <- sapply(df, is.character)
+
+df[ , chars] <- as.data.frame(apply(df, 2, as.numeric))
+
+# Q2. Apply the grade function to the entire class set
+
+apply(df, 1, grade)
+
+# Look at the average grades and find the highest average grade
+
+# Student 18 had the highest grade, 97.
+
+# Q3. Find the average scores of each homework assignment. Look at which value is the lowest.
+
+apply(df, 2, grade)
+
+# Homework 3, score = 81.21, was the hardest
+
+# Q4. Apply the grade function to each homework assignment to obtain the average score for each one
+
+apply(df, 2, grade)
+
+# Find the average class score
+
+df2 <- apply(df, 1, grade) 
+mean(df2)
+
+# Find the closest average homework assignment score to the average class score
+# hw1 = 89.37
+# average class score = 88.26
+
+```

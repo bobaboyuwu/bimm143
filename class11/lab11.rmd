@@ -1,0 +1,42 @@
+---
+title: 'Lab 11: Introduction to Genome Informatics Lab'
+author: "Jordan Laxa"
+date: "2023-02-20"
+output:
+  pdf_document: default
+  html_document: default
+---
+Q13: Read this file into R and determine the sample size for each genotype and their
+corresponding median expression levels for each of these genotypes.
+
+```{r}
+gene <- read.csv("gene.txt")
+library(stringr)
+gene[c('number', 'sample', 'genotype', 'expression')] <- str_split_fixed(gene$sample.geno.exp, ' ', 4)
+gene <- gene[c('number', 'sample', 'genotype', 'expression')]
+gene = subset(gene, select = -c(number))
+gene$expression <- as.numeric(gene$expression)
+summary(gene)
+geneAG <- subset(gene, genotype=="A/G")
+length(which(gene$genotype=="A/G"))
+summary(geneAG$expression)
+geneGG <- subset(gene, genotype=="G/G")
+length(which(gene$genotype=="G/G"))
+summary(geneGG$expression)
+geneAA <- subset(gene, genotype=="A/A")
+length(which(gene$genotype=="A/A"))
+summary(geneAA$expression)
+
+```
+
+Q13A. The sample size for genotype A/G is 233 and it's median expression level is 25.065. The sample size for genotype G/G is 121 and it's median expression level is 20.074. The sample size for genotype A/A is 108 and it's median expression level is 31.25.
+
+Q14: Generate a boxplot with a box per genotype, what could you infer from the relative
+expression value between A/A and G/G displayed in this plot? Does the SNP effect the
+expression of ORMDL3?
+
+```{r}
+boxplot(geneAA$expression, geneAG$expression, geneGG$expression, xlab = "genotype", ylab = "expression", names = c("AA", "AG", "GG"))
+```
+
+Q14A. The median expression value of G/G is 20.074, which is relatively lower than the median expression value of A/A, 31.25. The SNP decreases the expression of ORMDL3.
