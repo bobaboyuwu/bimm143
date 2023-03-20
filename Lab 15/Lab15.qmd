@@ -1,0 +1,49 @@
+---
+title: "Lab 15"
+format: pdf
+---
+
+Q1. What does the star character accomplish here? Ask Barry, or your class neighbor, if you are not sure!
+
+Q1A. The star character allows us to select all files that contain ".faa.gz." 
+
+Q2. How many sequences are in this mouse.1.protein.faa file? Hint: Try using grep to figure this out…
+
+Q2A. There are 641 proteins.
+
+Q3. What happens if you run the above command without the > mm-first.fa part?
+
+Q3A. It prints out what head mouse.1.protein.faa printed out along with ">XP_017169522.1 cation channel sperm-associated protein subunit epsilon isoform X4 [Mus musculus]."
+
+Q4. What happens if you were to use two ‘>’ symbols (i.e. >> mm-first.fa)?
+
+Q4A. The output of "head -11 mouse.1.protein.faa" is appended to "mm-first.fa."
+
+Q5.How would you determine how many sequences are in the mm-second.fa file?
+
+Q5A. I would type "grep mm-second.fa"
+
+```{r}
+library(readr)
+b <- read_tsv("mm-second.x.zebrafish.tsv", col_names=FALSE)
+names(b) <- c("qseqid", "sseqid", "pident", "length", "mismatch", "gapopen", "qstart", "qend", "sstart", "send", "evalue", "bitscore")
+View(b)
+```
+
+```{r}
+hist(b$bitscore, breaks=100)
+```
+
+```{r}
+library(ggplot2)
+ggplot(b, aes(pident, bitscore)) + geom_point(alpha=0.1) 
+```
+
+```{r}
+ggplot(b, aes((b$pident * (b$qend - b$qstart)), bitscore)) + geom_point(alpha=0.1) + geom_smooth()
+
+```
+
+Q6. Note the addition of the -r option here: What is it’s purpose? Also what about the *, what is it’s purpose here?
+
+Q6A. The purpose of the -r option is to combine our local machine and virtual machine. The purpose of "*" is to indicate where to save our work on the virtual machine.

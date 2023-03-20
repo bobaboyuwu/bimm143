@@ -1,0 +1,47 @@
+---
+title: "FindAGene"
+format: html
+---
+
+```{r}
+library(bio3d)
+a <- read.fasta("sequences.fas", rm.dup = TRUE, to.upper = FALSE, to.dash=TRUE)
+a
+```
+
+```{r}
+b <- seqidentity(a[["ali"]], normalize=TRUE, similarity=FALSE, ncore=1, nseg.scale=1)
+b
+```
+
+```{r}
+my_colors <- colorRampPalette(c("black", "cyan"))
+heatmap(b, col = my_colors(100), margins = c(9,9))
+```
+
+```{r}
+library("reshape")
+data_melt <- melt(b)
+head(data_melt) 
+```
+
+```{r}
+library("ggplot2")  
+ggp <- ggplot(data_melt, aes(X1, X2)) +         
+  geom_tile(aes(fill = value)) + labs(x = "Species", y = "Species", fill = "Sequence Identity") 
+
+```
+
+```{r}
+ggp + scale_fill_gradient(low = "cyan", high = "black")   
+```
+
+
+
+```{r}
+pdb <- read.pdb("7XTB")
+```
+```{r}
+pdb
+```
+

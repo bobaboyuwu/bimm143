@@ -1,0 +1,51 @@
+---
+title: "Lab 16"
+format: html
+---
+
+Q1. How would you check that these files with extension ‘.fastq’ actually look like what we expect for a FASTQ file? You could try printing the first few lines to the shell standard output:
+
+Q1A. head SRR2156848_1.fastq
+
+Q2. How could you check the number of sequences in each file?
+
+Q2A. grep -c "SRR2156848_1" SRR2156848_1.fastq 
+
+Q3. Check your answer with the bottom of the file using the tail command and also check the matching mate pair FASTQ file. Do these numbers match? If so why or why not?
+
+Q3A. These numbers match because the total number of sequences shoudl equal the number of the final sequence.
+
+Q4. Can you run kallisto to print out it’s citation information?
+
+Q4A. kallisto 0.44.0
+
+Usage: kallisto <CMD> [arguments] ..
+
+Where <CMD> can be one of:
+
+    index         Builds a kallisto index
+    quant         Runs the quantification algorithm
+    pseudo        Runs the pseudoalignment step
+    h5dump        Converts HDF5-formatted results to plaintext
+    inspect       Inspects and gives information about an index
+    version       Prints version information
+    cite          Prints citation information
+
+Running kallisto <CMD> without arguments prints usage information for <CMD>
+
+Q5. Have a look at the TSV format versions of these files to understand their structure. What do you notice about these files contents?
+
+```{r}
+library(tximport)
+folders <- dir(pattern="SRR21568*")
+samples <- sub("_quant", "", folders)
+files <- file.path( folders, "abundance.h5" )
+names(files) <- samples
+
+txi.kallisto <- tximport(files, type = "kallisto", txOut = TRUE)
+```
+
+```{r}
+head(txi.kallisto$counts)
+```
+
